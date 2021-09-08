@@ -30,16 +30,22 @@ scene("main", () => {
   keyDown("d", () => {
    sr.angle -= dt() * 3
   })
+
   keyPress("s", () => {
     const laser = add([
+      "laser",
       sprite("laser"),
-      pos(100, 100),
-      scale(0.1)
+      pos(sr.pos),
+      rotate(sr.angle),
+      scale(0.1),
+      origin("center")
     ])
     laser.play("go")
   })
   
-
+  action("laser", (obj) => {
+    obj.move(-300 * Math.sin(obj.angle), -300 * Math.cos(obj.angle));
+  });
   
 
   // keyDown("4", () => {
