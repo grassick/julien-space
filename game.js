@@ -2,6 +2,7 @@
 kaboom({ fullscreen: true, global: true });
 
 loadSprite("spacecraft", "spacecraft.png")
+loadSprite('meteor', "meteor.png")
 loadSprite("laser", "laser.png", {
   sliceX: 11,
   sliceY: 1,
@@ -15,38 +16,52 @@ loadSprite("laser", "laser.png", {
 scene("main", () => {
   const sr = add([
     sprite("spacecraft"),
-    pos(width()/2, height()/2),
+    pos(width() / 2, height() / 2),
     scale(0.2),
     rotate(0),
     origin("center"),
-    solid()
+    {
+      temp: 0
+
+    }
   ])
 
-  
+  loop(0.1, () => {
+    sr.temp= sr.temp-1 
+
+  });
+
   keyDown("a", () => {
     sr.angle += dt() * 3
   })
 
   keyDown("d", () => {
-   sr.angle -= dt() * 3
+    sr.angle -= dt() * 3
   })
 
-  keyPress("s", () => {
-    const laser = add([
-      "laser",
-      sprite("laser"),
-      pos(sr.pos),
-      rotate(sr.angle),
-      scale(0.1),
-      origin("center")
-    ])
-    laser.play("go")
+  keyDown("s", () => {
+    if (sr.temp <= 0) {
+      sr.temp = 10
+      const laser = add([
+        "laser",
+        sprite("laser"),
+        pos(sr.pos),
+        rotate(sr.angle),
+        scale(0.1),
+        origin("center")
+      ])
+      laser.play("go")
+    }
   })
-  
+
   action("laser", (obj) => {
     obj.move(-300 * Math.sin(obj.angle), -300 * Math.cos(obj.angle));
   });
-  
+
+  add(["meteor",
+    sprite('meteor'),
+    scale(0.2)
+  ])
 
   // keyDown("4", () => {
   //   blue.angle += dt() * 3
@@ -184,7 +199,7 @@ scene("main", () => {
 
   // collides("missile", "missile", (missile1, missile2) => {
   //   return
-    
+
   //   // remove both the bullet and the thing bullet hit with tag "killable" from scene
   //   destroy(missile1)
   //   destroy(missile2)
