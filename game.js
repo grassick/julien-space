@@ -15,6 +15,7 @@ loadSprite("laser", "laser.png", {
 // define a scene
 scene("main", () => {
   const sr = add([
+    "sr",
     sprite("spacecraft"),
     pos(width() / 2, height() / 2),
     scale(0.2),
@@ -27,8 +28,27 @@ scene("main", () => {
   ])
 
   loop(0.1, () => {
-    sr.temp= sr.temp-1 
+    sr.temp = sr.temp - 1
+  })
 
+  loop(2.0, () => {
+    const angle = rand(0, 100)
+    const radius = Math.sqrt(width()*width() + height()*height())/2
+
+    add([
+      "meteor",
+      sprite('meteor'),
+      pos(Math.cos(angle)*radius + width() /2, Math.sin(angle)*radius + height() /2),
+      scale(0.2), 
+      {
+        angle: angle
+      },
+      origin("center")
+    ])
+  })
+
+  action("meteor", (obj) => {
+    obj.move(100 * -Math.cos(obj.angle), -100 * Math.sin(obj.angle));
   });
 
   keyDown("a", () => {
@@ -55,13 +75,71 @@ scene("main", () => {
   })
 
   action("laser", (obj) => {
-    obj.move(-300 * Math.sin(obj.angle), -300 * Math.cos(obj.angle));
+    obj.move(-600* Math.sin(obj.angle), -600 * Math.cos(obj.angle));
   });
 
-  add(["meteor",
-    sprite('meteor'),
-    scale(0.2)
-  ])
+  collides("laser", "meteor", (laser, meteor) => {
+    destroy(meteor)
+    destroy(laser)
+
+   //  play("explosion")
+
+    // const explosion = add([
+    //   sprite("explosion"),
+    //   pos(missile.pos),
+    //   origin("center")
+    // ])
+    // explosion.play("boom")
+
+    // wait(1, () => {
+    //   destroy(explosion)
+    // });
+
+    // const explosion2 = add([
+    //   sprite("explosion"),
+    //   pos(tank.pos),
+    //   origin("center"),
+    //   scale(5)
+    // ])
+    // explosion2.play("boom")
+
+    // wait(1, () => {
+    //   destroy(explosion2)
+    //   go("start")
+    // });
+  })
+
+  collides("sr", "meteor", (sr, meteor) => {
+    destroy(meteor)
+    destroy(sr)
+
+   //  play("explosion")
+
+    // const explosion = add([
+    //   sprite("explosion"),
+    //   pos(missile.pos),
+    //   origin("center")
+    // ])
+    // explosion.play("boom")
+
+    // wait(1, () => {
+    //   destroy(explosion)
+    // });
+
+    // const explosion2 = add([
+    //   sprite("explosion"),
+    //   pos(tank.pos),
+    //   origin("center"),
+    //   scale(5)
+    // ])
+    // explosion2.play("boom")
+
+    // wait(1, () => {
+    //   destroy(explosion2)
+    //   go("start")
+    // });
+  })
+
 
   // keyDown("4", () => {
   //   blue.angle += dt() * 3
