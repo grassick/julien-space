@@ -1,5 +1,9 @@
 // init kaboom context
-kaboom({ fullscreen: true, global: true });
+kaboom({ 
+  fullscreen: true, 
+  global: true, 
+  clearColor: [0, 0, 0],
+});
 
 loadSprite("spacecraft", "spacecraft.png")
 loadSprite('meteor', "meteor.png")
@@ -7,7 +11,7 @@ loadSprite("laser", "laser.png", {
   sliceX: 11,
   sliceY: 1,
   anims: {
-    go: [0, 10]
+    go: { from: 0, to: 10 }
   }
 })
 
@@ -23,7 +27,6 @@ scene("main", () => {
     origin("center"),
     {
       temp: 0
-
     }
   ])
 
@@ -43,7 +46,8 @@ scene("main", () => {
       {
         angle: angle
       },
-      origin("center")
+      origin("center"),
+      area()
     ])
   })
 
@@ -64,13 +68,13 @@ scene("main", () => {
       sr.temp = 10
       const laser = add([
         "laser",
-        sprite("laser"),
+        sprite("laser", { anim: "go" }),
         pos(sr.pos),
         rotate(sr.angle),
         scale(0.1),
-        origin("center")
+        origin("center"),
+        area()
       ])
-      laser.play("go")
     }
   })
 
@@ -298,4 +302,4 @@ scene("main", () => {
 
 
 // start the game
-start("main");
+go("main");
