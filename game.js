@@ -60,7 +60,7 @@ scene("main", () => {
   })
 
   action("meteor", (obj) => {
-    obj.move(100 * -Math.cos(obj.angle), -100 * Math.sin(obj.angle));
+    obj.move(200 * -Math.cos(obj.angle), -200 * Math.sin(obj.angle));
   });
 
   keyDown("a", () => {
